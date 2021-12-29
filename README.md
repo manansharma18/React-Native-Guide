@@ -28,7 +28,7 @@ function App() {
   );
 }
 ```
-4. The component prop in the above example accepts component, not a render function. Don't pass an inline function (e.g. component={() => <HomeScreen />}), or your component will unmount and remount losing all state when the parent component re-renders. See Passing additional props for alternatives.
+4. The component prop in the above example accepts component, not a render function. Don't pass an inline function (e.g. component={() => <HomeScreen />}), or your component will unmount and remount losing all state when the parent component re-renders.
 5. Sometimes we might want to pass additional props to a screen. We can do that with 2 approaches:
 
     1. Use React context and wrap the navigator with a context provider to pass data to the screens (recommended).
