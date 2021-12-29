@@ -39,4 +39,77 @@ function App() {
 </Stack.Screen>
 ```
 Note: By default, React Navigation applies optimizations to screen components to prevent unnecessary renders. Using a render callback removes those optimizations. So if you use a render callback, you'll need to ensure that you use React.memo or React.PureComponent for your screen components to avoid performance issues.
-6. 
+6. ```function DetailsScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Details Screen</Text>
+      <Button
+        title="Go to Details... again"
+        onPress={() => navigation.navigate('Details')}
+      />
+    </View>
+  );
+}```
+If you run this code, you'll notice that when you tap "Go to Details... again" that it doesn't do anything! This is because we are already on the Details route. The navigate function roughly means "go to this screen", and if you are already on that screen then it makes sense that it would do nothing. Let's suppose that we actually want to add another details screen. This is pretty common in cases where you pass in some unique data to each route (more on that later when we talk about params!). To do this, we can change navigate to push. This allows us to express the intent to add another route regardless of the existing navigation history. Sometimes you'll want to be able to programmatically trigger this behavior, and for that you can use navigation.goBack(). 
+7. navigation.popToTop(), which goes back to the first screen in the stack.
+8. Pass params to a route by putting them in an object as a second parameter to the navigation.navigate function: navigation.navigate('RouteName', { /* params go here */ }) 
+9. Read the params in your screen component: route.params.
+``` function HomeScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Home Screen</Text>
+      <Button
+        title="Go to Details"
+        onPress={() => {
+          /* 1. Navigate to the Details route with params */
+          navigation.navigate('Details', {
+            itemId: 86,
+            otherParam: 'anything you want here',
+          });
+        }}
+      />
+    </View>
+  );
+}
+
+function DetailsScreen({ route, navigation }) {
+  /* 2. Get the param */
+  const { itemId, otherParam } = route.params;
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Details Screen</Text>
+      <Text>itemId: {JSON.stringify(itemId)}</Text>
+      <Text>otherParam: {JSON.stringify(otherParam)}</Text>
+      <Button
+        title="Go to Details... again"
+        onPress={() =>
+          navigation.push('Details', {
+            itemId: Math.floor(Math.random() * 100),
+          })
+        }
+      />
+      <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
+      <Button title="Go back" onPress={() => navigation.goBack()} />
+    </View>
+  );
+} 
+```
+10.React Navigation emits events to screen components that subscribe to them. We can listen to focus and blur events to know when a screen comes into focus or goes out of focus respectively.
+```
+Example:
+
+Try this example on Snack 
+function Profile({ navigation }) {
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      // Screen was focused
+      // Do something
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  return <ProfileContent />;
+}
+```
+Instead of adding event listeners manually, we can use the useFocusEffect hook to perform side effects. It's like React's useEffect hook, but it ties into the navigation lifecycle.
