@@ -1,6 +1,18 @@
 # React-Native-Guide
 Notes For React Native
+## Components
+1. A view is the basic building block of UI: a small rectangular element on the screen which can be used to display text, images, or respond to user input.
+2. SafeAreaView is the component that puts the UI  within the safe area boundaries of a device. Safe Area's paddings reflect the physical limitation of the screen, such as rounded corners or camera notches.
+3. Core Components are <View>, <Text>, <ScrollView>, <TextInput>. Button has a onPress prop. You can still use <> </> instead of using <View></View> for top level components. TextInput has a onChangeText prop for a change in text and a onSubmitEditing prop for a function to be called when the text is submitted.
+4. The FlatList component displays a scrolling list of changing, but similarly structured, data. FlatList works well for long lists of data, where the number of items might change over time. Unlike the more generic ScrollView, the FlatList only renders elements that are currently showing on the screen, not all the elements at once.
 
+### Fast Refresh
+1. Fast Refresh is a React Native feature that allows you to get near-instant feedback for changes in your React components.
+2. If you edit a module that only exports React component(s), Fast Refresh will update the code only for that module, and re-render your component. You can edit anything in that file, including styles, rendering logic, event handlers, or effects.
+3. If you edit a module with exports that aren't React components, Fast Refresh will re-run both that module, and the other modules importing it. So if both Button.js and Modal.js import Theme.js, editing Theme.js will update both components.
+4. Finally, if you edit a file that's imported by modules outside of the React tree, Fast Refresh will fall back to doing a full reload. You might have a file which renders a React component but also exports a value that is imported by a non-React component. For example, maybe your component also exports a constant, and a non-React utility module imports it. In that case, consider migrating the constant to a separate file and importing it into both files. This will re-enable Fast Refresh to work. Other cases can usually be solved in a similar way.
+5. 
+  
 ## Navigation
 1. What happens when we navigate away from a route, or when we come back to it? How does a route find out that a user is leaving it or coming back to it?
 If you are coming to react-navigation from a web background, you may assume that when user navigates from route A to route B, A will unmount (its componentWillUnmount is called) and A will mount again when user comes back to it. While these React lifecycle methods are still valid and are used in react-navigation, their usage differs from the web.
